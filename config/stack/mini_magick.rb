@@ -8,7 +8,7 @@ package :mini_magick do
     has_gem 'mini_magick'
   end
   
-  requires :ruby_enterprise
+  requires :ruby
   requires :image_magick
 end
 

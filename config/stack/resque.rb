@@ -22,6 +22,6 @@ package :resque do
   end
   
   requires :redis
-  requires :ruby_enterprise
+  requires :ruby
   requires :monit
 end

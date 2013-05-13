@@ -1,6 +1,6 @@
 require File.join(File.dirname(__FILE__), '../config.rb')
 
-require 'ruby_enterprise'
+require 'ruby_19'
 
 # Handles manual log parsing through CRON script, or via Scout app
 
@@ -17,5 +17,5 @@ package :rails_log_analyzer do
     has_executable 'pl_analyze'
   end
   
-  requires :ruby_enterprise
+  requires :ruby
 end

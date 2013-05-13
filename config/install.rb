@@ -10,7 +10,7 @@ policy :rails_stack, :roles => :app do
   requires :user
   requires :iptables_appserver
   # Web / app stack
-  requires :ruby_enterprise # Ruby Enterprise Edition
+  requires :ruby # Ruby 1.9
   requires :webserver # Apache
   requires :appserver # Passenger
   # Mysql Client

@@ -45,7 +45,7 @@ package :passenger, :provides => :appserver do
     binaries.each {|bin| has_symlink "/usr/local/bin/#{bin}", "#{REE_PATH}/bin/#{bin}" }
   end
 
-  requires :apache, :apache2_prefork_dev, :ruby_enterprise
+  requires :apache, :apache2_prefork_dev, :ruby
   optional :passenger_config
 end
 
