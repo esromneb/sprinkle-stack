@@ -18,26 +18,28 @@ policy :rails_stack, :roles => :app do
   # Support apps
   requires :logrotate
   requires :git
-  requires :redis
+  # requires :redis
   requires :monit
   # Rails app stack
   requires :mini_magick
   requires :rails_log_analyzer
-  requires :resque
-  requires :gitolite
+  # requires :resque
+  # requires :gitolite
 end
 
-policy :db_stack, :roles => :db do
-  # Config
-  requires :ntpdate
-  requires :user
-  requires :iptables_database
-  # Support apps
-  requires :logrotate
-  # Servers
-  requires :database_server
-  # requires :sphinx
-end
+
+# For now disabling database server
+# policy :db_stack, :roles => :db do
+#   # Config
+#   requires :ntpdate
+#   requires :user
+#   requires :iptables_database
+#   # Support apps
+#   requires :logrotate
+#   # Servers
+#   requires :database_server
+#   # requires :sphinx
+# end
 
 deployment do
   # mechanism for deployment
