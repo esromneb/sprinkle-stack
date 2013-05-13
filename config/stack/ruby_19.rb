@@ -25,12 +25,12 @@ end
  
 package :ruby_dependencies do
   description 'Ruby Virtual Machine Build Dependencies'
-  apt %w(bison zlib1g-dev libssl-dev libreadline5-dev libncurses5-dev file)
+  apt %w(bison zlib1g-dev libssl-dev libreadline-gplv2-dev libncurses5-dev file)
   verify do
     has_apt "bison"
     has_apt "zlib1g-dev"
     has_apt "libssl-dev"
-    has_apt "libreadline5-dev"
+    has_apt "libreadline-gplv2-dev"
     has_apt "libncurses5-dev"
     has_apt "file"
   end
