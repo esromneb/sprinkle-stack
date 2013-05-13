@@ -9,31 +9,49 @@ require File.join(File.dirname(__FILE__), '../config.rb')
 package :ruby do
   description 'Ruby Virtual Machine'
   version '1.9.3'
-  source "http://ftp.ruby-lang.org/pub/ruby/1.9/ruby-1.9.3-p392.tar.gz" do
-     # Rebuild all gems in case we updated to a newer version of Ruby
+
+
+  runner '/usr/local/rvm/scripts/rvm install 1.9.3' do
+   
+    # not sure if this goes here?
+    # pre :prepare, "source /usr/local/rvm/scripts/rvm"
+
+    # previous script had passenger installed at this point
+    post :install, "gem install passenger"
+
+    # Rebuild all gems in case we updated to a newer version of Ruby
     post :install, "gem update --system"
     post :install, "gem pristine --all"
+    post :install, "/usr/local/rvm/scripts/rvm use --default 1.9.3"
   end
-  requires :ruby_dependencies
+
   verify do
     has_executable_with_version(
-      "#{REE_PATH}/bin/ruby", "Ruby Enterprise Edition #{version}"
+      "ruby", "ruby #{version}"
     )
-    #binaries.each {|bin| has_symlink "/usr/local/bin/#{bin}", "#{REE_PATH}/bin/#{bin}" }
   end
+
+
+  requires :ruby_dependencies
+
+
+
+  # verify do
+  #   has_executable_with_version(
+  #     "#{REE_PATH}/bin/ruby", "Ruby Enterprise Edition #{version}"
+  #   )
+  #   binaries.each {|bin| has_symlink "/usr/local/bin/#{bin}", "#{REE_PATH}/bin/#{bin}" }
+  # end
 end
  
 package :ruby_dependencies do
-  description 'Ruby Virtual Machine Build Dependencies'
-  apt %w(bison zlib1g-dev libssl-dev libreadline-gplv2-dev libncurses5-dev file)
-  verify do
-    has_apt "bison"
-    has_apt "zlib1g-dev"
-    has_apt "libssl-dev"
-    has_apt "libreadline-gplv2-dev"
-    has_apt "libncurses5-dev"
-    has_apt "file"
+  description 'RVM as root'
+  apt 'curl' do
+    post :install, "curl -L https://get.rvm.io | bash -s stable --autolibs=enabled --ruby"
+    post :install, "/usr/local/rvm/scripts/rvm pkg install libyaml"
   end
+  
+  verify { file_contains '/usr/local/rvm/scripts/rvm', "rvm : Ruby enVironment Manager"}
 end
 
 

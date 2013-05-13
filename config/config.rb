@@ -17,6 +17,7 @@ CONFIG = {
   }
 }
 
-REE_PATH = "/usr/local/ruby-enterprise"
+REE_PATH = "/usr/local/ruby1.9"
+RVM_BASE = "/usr/local/rvm/"
 PASSENGER_VERSION = '4.0.2'
 USER_TO_ADD = 'deploy'
