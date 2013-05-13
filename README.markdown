@@ -30,6 +30,7 @@ to the remote file located here:
 
   - Edit config.rb (you shouldn't need to)
   - copy deploy.rb.example to deploy.rb
+  - Edit deploy.rb and change the remote address of your server
 
   - Running is as simple as:
 
