@@ -1,0 +1,9 @@
+--- ./ruby-enterprise-1.8.7-2012.02/source/distro/google-perftools-1.7/src/tcmalloc.cc	2012-02-19 14:09:11.000000000 +0000
++++ tcmalloc.cc	2013-05-13 02:54:50.471090547 +0000
+@@ -1669,5 +1669,5 @@
+   MallocHook::InvokeNewHook(result, size);
+   return result;
+ }
+-void *(*__memalign_hook)(size_t, size_t, const void *) = MemalignOverride;
++void *(*volatile __memalign_hook)(size_t, size_t, const void *) = MemalignOverride;
+ #endif  // #ifndef TCMALLOC_FOR_DEBUGALLOCATION
