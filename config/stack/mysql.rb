@@ -39,11 +39,18 @@ end
  
 package :mysql_driver, :provides => :ruby_database_driver do
   description 'Ruby MySQL database driver'
-  gem 'mysql2'
+  runner "bash -c 'source /etc/profile.d/rvm.sh; rvmsudo gem install mysql2'"
   
+  # verify do
+  #   has_gem 'mysql2'
+  # end
   verify do
-    has_gem 'mysql2'
+    rvm_has_gem 'mysql2'
   end
+
+  #  verify do 
+  #   @commands << "bash -c 'source /etc/profile.d/rvm.sh; gem list 'mysql2' --installed'"
+  # end
   
   requires :ruby
 end

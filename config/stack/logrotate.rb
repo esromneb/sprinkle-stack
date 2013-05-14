@@ -8,7 +8,8 @@ package :logrotate do
   
   transfer(
     File.join(File.dirname(__FILE__), 'files/logrotate_rails.config'), 
-    rails_logrotate_config
+    rails_logrotate_config,
+    :sudo => true
   )
   
   verify do

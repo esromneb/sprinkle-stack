@@ -33,16 +33,18 @@ package :passenger, :provides => :appserver do
   description 'Phusion Passenger (mod_rails)'
   binaries = %w(passenger-config passenger-install-nginx-module passenger-install-apache2-module passenger-make-enterprisey passenger-memory-stats passenger-spawn-server passenger-status passenger-stress-test)
   
-  gem 'passenger', :version => PASSENGER_VERSION do    
-    binaries.each {|bin| post :install, "ln -sf #{REE_PATH}/bin/#{bin} /usr/local/bin/#{bin}"}
-    post :install, 'echo -en "\n\n\n\n" | sudo passenger-install-apache2-module'
+  # gem 'passenger', :version => PASSENGER_VERSION do   
+  runner "bash -c 'source /etc/profile.d/rvm.sh; rvmsudo gem install passenger'" do
+    # binaries.each {|bin| post :install, "ln -sf #{REE_PATH}/bin/#{bin} /usr/local/bin/#{bin}"}
+
+    post :install, 'bash -c \' source /etc/profile.d/rvm.sh; echo -en "\n\n\n\n" | rvmsudo /usr/local/rvm/gems/ruby-1.9.3-p392/bin/passenger-install-apache2-module\' '
     # Restart apache to note changes
     post :install, '/etc/init.d/apache2 restart'
   end
 
   verify do
-    has_file "#{REE_PATH}/lib/ruby/gems/1.9.1/gems/passenger-#{PASSENGER_VERSION}/libout/apache2/mod_passenger.so"
-    binaries.each {|bin| has_symlink "/usr/local/bin/#{bin}", "#{REE_PATH}/bin/#{bin}" }
+    has_file "/usr/local/rvm/gems/ruby-1.9.3-p392/gems/passenger-4.0.2/libout/apache2/mod_passenger.so"
+    # binaries.each {|bin| has_symlink "/usr/local/bin/#{bin}", "#{REE_PATH}/bin/#{bin}" }
   end
 
   requires :apache, :apache2_prefork_dev, :ruby
@@ -56,7 +58,8 @@ package :passenger_config do
   transfer(
     File.join(File.dirname(__FILE__), 'files/apache-passenger.config'), 
     passenger_conf,
-    :render => true
+    :render => true,
+    :sudo => true
   ) do
     post :install, '/etc/init.d/apache2 restart'
   end

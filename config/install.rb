@@ -3,6 +3,7 @@ $:<< File.dirname(__FILE__) << File.join(File.dirname(__FILE__), 'stack')
 Dir[File.join(File.dirname(__FILE__), 'stack', '*.rb')].each { |lib| require File.basename(lib) }
 
 require 'config'
+require 'monkeypatch'
 
 policy :rails_stack, :roles => :app do
   # Configuration

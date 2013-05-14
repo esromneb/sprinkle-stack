@@ -2,10 +2,10 @@ require File.join(File.dirname(__FILE__), '../config.rb')
 
 package :mini_magick do
   description "Allows manipulation of image files from Ruby/Rails"
-  gem 'mini_magick'
+  runner "bash -c 'source /etc/profile.d/rvm.sh; rvmsudo gem install mini_magick'"
   
   verify do
-    has_gem 'mini_magick'
+    rvm_has_gem 'mini_magick'
   end
   
   requires :ruby

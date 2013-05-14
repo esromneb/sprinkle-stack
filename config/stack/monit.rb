@@ -5,7 +5,8 @@ package :monit do
   apt %w( monit ) do
     post :install, "mkdir -p /etc/monit/conf"
     # Allows start up of monit
-    post :install, "echo 'startup=1' > /etc/default/monit"
+    # Not needed, already set to YES
+    # post :install, "echo 'startup=1' > /etc/default/monit"
   end
   
   monit_config = '/etc/monit/monitrc'
