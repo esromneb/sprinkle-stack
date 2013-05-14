@@ -10,19 +10,38 @@ package :ruby do
   description 'Ruby Virtual Machine'
   version '1.9.3'
 
+  binaries = %w(erb gem irb rake rdoc ri ruby testrb)
 
-  runner '/usr/local/rvm/scripts/rvm install 1.9.3' do
+
+  runner 'source /etc/profile.d/rvm.sh; rvmsudo rvm install 1.9.3' do
    
     # not sure if this goes here?
     # pre :prepare, "source /usr/local/rvm/scripts/rvm"
 
-    # previous script had passenger installed at this point
-    post :install, "gem install passenger"
+    # pre :prepare, 'source /etc/profile.d/rvm.sh'
 
-    # Rebuild all gems in case we updated to a newer version of Ruby
-    post :install, "gem update --system"
-    post :install, "gem pristine --all"
-    post :install, "/usr/local/rvm/scripts/rvm use --default 1.9.3"
+    # hardcoding for now, will automate later
+    install_path = '/usr/local/rvm/rubies/ruby-1.9.3-p392'
+
+    # Link ruby binaries (this pretty much ignores rvm's switching capabilities)
+    # binaries.each {|bin| post :install, "ln -sf #{install_path}/bin/#{bin} /usr/local/bin/#{bin}" }
+
+
+    # Link rvm so we can switch using sudo etc
+
+    #post :isntall "ln -sf /usr/local/rvm/bin/rvm /usr/local/bin/rvm"
+
+
+    # can't figure out how to get rvm to swich this itself, so lets do it
+    # post :isntall, 'unlink /usr/local/rvm/rubies/default ; ln -sf /usr/local/rvm/rubies/ruby-1.9.3-p392/ /usr/local/rvm/rubies/default'
+
+    # post :isntall, "rvm use 1.9.3 --default"
+    post :install, "source /etc/profile.d/rvm.sh; rvmsudo rvm alias create default ruby-1.9.3-p392", :sudo =>false
+ 
+    # post :install, "gem update --system"
+    # post :install, "gem pristine --all"
+    
+    # post :install, cmd
   end
 
   verify do
@@ -47,11 +66,14 @@ end
 package :ruby_dependencies do
   description 'RVM as root'
   apt 'curl' do
-    post :install, "curl -L https://get.rvm.io | bash -s stable --autolibs=enabled --ruby"
-    post :install, "/usr/local/rvm/scripts/rvm pkg install libyaml"
+    post :install, 'curl -L https://get.rvm.io -o /tmp/rvm-installer'
+    post :install, 'chmod +x /tmp/rvm-installer'
+    post :install, '/tmp/rvm-installer --autolibs=enabled stable'
+    # post :install, "return 1 && bash -c 'curl -L https://get.rvm.io | bash -s stable --autolibs=enabled'"
+    # post :install, "/usr/local/rvm/scripts/rvm pkg install libyaml"
   end
   
-  verify { file_contains '/usr/local/rvm/scripts/rvm', "rvm : Ruby enVironment Manager"}
+  verify { file_contains '/usr/local/rvm/bin/rvm', "rvm_rvmrc_files"}
 end
 
 

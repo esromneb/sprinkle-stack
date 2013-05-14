@@ -88,7 +88,8 @@ package :apache_deflate_support do
   deflate_conf = '/etc/apache2/conf.d/deflate.conf'
   transfer(
     File.join(File.dirname(__FILE__), 'files/apache-mod_deflate.config'), 
-    deflate_conf
+    deflate_conf,
+    :sudo => true
   ) do
     post :install, 'a2enmod deflate'
     post :install, '/etc/init.d/apache2 restart'
@@ -107,7 +108,7 @@ package :apache_expires_support do
     '/tmp/passenger-stack-expires-snip.txt'
   ) do
     post :install, 'stat /tmp/passenger-stack-expires-snip.txt'
-    post :install, "cat /tmp/passenger-stack-expires-snip.txt >> #{apache_conf}"
+    post :install, "sudo bash -c 'cat /tmp/passenger-stack-expires-snip.txt >> #{apache_conf}'"
   end
 
   verify { file_contains apache_conf, "Passenger-stack-expires"}

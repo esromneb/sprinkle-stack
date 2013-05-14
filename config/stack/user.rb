@@ -20,13 +20,14 @@ package :user_install_ssh_key do
   
   user_ssh_path = "/home/#{USER_TO_ADD}/.ssh"
   
-  transfer File.join(ENV['HOME'], '.ssh/id_rsa.pub'), "#{user_ssh_path}/authorized_keys" do
+  transfer File.join(ENV['HOME'], '.ssh/id_rsa.pub'), "/tmp/authorized_keys" do
     pre :install, "mkdir -p #{user_ssh_path}"
     post :install do
       [
-        "chown -R #{USER_TO_ADD}:#{USER_GROUP} #{user_ssh_path}",
-        "chmod 700 #{user_ssh_path}",
-        "chmod 600 #{user_ssh_path}/authorized_keys"
+        "sudo mv /tmp/authorized_keys #{user_ssh_path}/authorized_keys",
+        "sudo chown -R #{USER_TO_ADD}:#{USER_GROUP} #{user_ssh_path}",
+        "sudo chmod 700 #{user_ssh_path}",
+        "sudo chmod 600 #{user_ssh_path}/authorized_keys"
       ]
     end
   end
@@ -35,15 +36,15 @@ package :user_install_ssh_key do
 end
 
 package :user_allow_sudo do
-  description "Allow added user to perform sudo commands"
+#   description "Allow added user to perform sudo commands"
   
-  sudo_conf = '/etc/sudoers'
-  sudo_config = %Q\
-# Allow #{USER_TO_ADD} user sudo
-deploy ALL=NOPASSWD: ALL
-  \
+#   sudo_conf = '/etc/sudoers'
+#   sudo_config = %Q\
+# # Allow #{USER_TO_ADD} user sudo
+# deploy ALL=NOPASSWD: ALL
+#   \
 
-  push_text sudo_config, sudo_conf  
+#   push_text sudo_config, sudo_conf  
   
-  verify { file_contains sudo_conf, "Allow #{USER_TO_ADD} user sudo" }
+#   verify { file_contains sudo_conf, "Allow #{USER_TO_ADD} user sudo" }
 end
