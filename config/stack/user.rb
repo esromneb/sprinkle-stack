@@ -11,7 +11,7 @@ package :user do
 
   verify { has_directory "/home/#{USER_TO_ADD}" }
   
-  optional :user_install_ssh_key, :user_allow_sudo
+  optional :user_install_ssh_key, :user_allow_sudo, :user_make_pubkey
   requires :sudo
 end
 
@@ -33,6 +33,20 @@ package :user_install_ssh_key do
   end
   
   verify { has_file "#{user_ssh_path}/authorized_keys" }
+end
+
+package :user_make_pubkey do
+
+  user_ssh_path = "/home/#{USER_TO_ADD}/.ssh"
+
+  runner "echo -en '\n\n\n\n' | ssh-keygen -N '' -t rsa -C '#{SSH_KEY_EMAIL}'" do
+   
+
+  end
+
+  verify { has_file "#{user_ssh_path}/id_rsa"}
+
+  requires :user_install_ssh_key
 end
 
 package :user_allow_sudo do
