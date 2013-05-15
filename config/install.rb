@@ -12,6 +12,7 @@ policy :rails_stack, :roles => :app do
   requires :iptables_appserver
   # Web / app stack
   requires :ruby # Ruby 1.9
+  requires :ruby_gems # Rails stuff
   requires :webserver # Apache
   requires :appserver # Passenger
   # Mysql Client

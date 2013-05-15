@@ -40,10 +40,6 @@ package :ruby do
  
     
 
-    post :install, "source /etc/profile.d/rvm.sh; rvmsudo gem install rails"
-
-    post :install, "source /etc/profile.d/rvm.sh; rvmsudo gem update --system"
-    post :install, "source /etc/profile.d/rvm.sh; rvmsudo gem pristine --all"
     
   end
 
@@ -63,6 +59,7 @@ package :ruby do
 
 
   requires :ruby_dependencies
+  # optional :ruby_gems
 
 
 
@@ -72,6 +69,28 @@ package :ruby do
   #   )
   #   binaries.each {|bin| has_symlink "/usr/local/bin/#{bin}", "#{REE_PATH}/bin/#{bin}" }
   # end
+end
+
+
+# something is wrong with this as is
+# this helps I think: http://stackoverflow.com/questions/12326705/error-gem-bundler-is-not-installed-run-gem-install-bundler-first
+package :ruby_gems do
+
+  apt 'curl' do
+
+    post :install, "bash -c 'source /etc/profile.d/rvm.sh; rvmsudo gem install rails'"
+    post :install, "bash -c 'source /etc/profile.d/rvm.sh; rvmsudo gem install bundler'"
+
+    post :install, "bash -c 'source /etc/profile.d/rvm.sh; rvmsudo gem update --system'"
+    post :install, "bash -c 'source /etc/profile.d/rvm.sh; rvmsudo gem pristine --all'"
+
+    verify do
+      rvm_has_gem 'rails'
+      rvm_has_gem 'bundler'
+    end
+  end
+
+  requires :ruby
 end
  
 package :ruby_dependencies do
