@@ -12,7 +12,8 @@ package :monit do
   monit_config = '/etc/monit/monitrc'
   transfer(
     File.join(File.dirname(__FILE__), 'files/monitrc.config'), 
-    monit_config
+    monit_config,
+    :sudo => true
   ) do 
     # Monit won't start if there's nothing to include in the conf file,
     # even an empty dummy file.

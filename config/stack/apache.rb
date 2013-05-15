@@ -37,13 +37,13 @@ package :passenger, :provides => :appserver do
   runner "bash -c 'source /etc/profile.d/rvm.sh; rvmsudo gem install passenger'" do
     # binaries.each {|bin| post :install, "ln -sf #{REE_PATH}/bin/#{bin} /usr/local/bin/#{bin}"}
 
-    post :install, 'bash -c \' source /etc/profile.d/rvm.sh; echo -en "\n\n\n\n" | rvmsudo /usr/local/rvm/gems/ruby-1.9.3-p392/bin/passenger-install-apache2-module\' '
+    post :install, 'bash -c \' source /etc/profile.d/rvm.sh; echo -en "\n\n\n\n" | rvmsudo /usr/local/rvm/gems/ruby-1.9.3-p429/bin/passenger-install-apache2-module\' '
     # Restart apache to note changes
     post :install, '/etc/init.d/apache2 restart'
   end
 
   verify do
-    has_file "/usr/local/rvm/gems/ruby-1.9.3-p392/gems/passenger-4.0.2/libout/apache2/mod_passenger.so"
+    has_file "/usr/local/rvm/gems/ruby-1.9.3-p429/gems/passenger-4.0.2/libout/apache2/mod_passenger.so"
     # binaries.each {|bin| has_symlink "/usr/local/bin/#{bin}", "#{REE_PATH}/bin/#{bin}" }
   end
 

@@ -13,7 +13,7 @@ package :ruby do
   binaries = %w(erb gem irb rake rdoc ri ruby testrb)
 
 
-  runner 'source /etc/profile.d/rvm.sh; rvmsudo rvm install 1.9.3' do
+  runner 'bash -c "source /etc/profile.d/rvm.sh; rvmsudo rvm install 1.9.3"' do
    
     # not sure if this goes here?
     # pre :prepare, "source /usr/local/rvm/scripts/rvm"
@@ -21,7 +21,7 @@ package :ruby do
     # pre :prepare, 'source /etc/profile.d/rvm.sh'
 
     # hardcoding for now, will automate later
-    install_path = '/usr/local/rvm/rubies/ruby-1.9.3-p392'
+    install_path = '/usr/local/rvm/rubies/ruby-1.9.3-p429'
 
     # Link ruby binaries (this pretty much ignores rvm's switching capabilities)
     # binaries.each {|bin| post :install, "ln -sf #{install_path}/bin/#{bin} /usr/local/bin/#{bin}" }
@@ -36,17 +36,28 @@ package :ruby do
     # post :isntall, 'unlink /usr/local/rvm/rubies/default ; ln -sf /usr/local/rvm/rubies/ruby-1.9.3-p392/ /usr/local/rvm/rubies/default'
 
     # post :isntall, "rvm use 1.9.3 --default"
-    post :install, "source /etc/profile.d/rvm.sh; rvmsudo rvm alias create default ruby-1.9.3-p392", :sudo =>false
+    post :install, "source /etc/profile.d/rvm.sh; rvmsudo rvm alias create default ruby-1.9.3-p429"
  
-    # post :install, "gem update --system"
-    # post :install, "gem pristine --all"
     
-    # post :install, cmd
+
+    post :install, "source /etc/profile.d/rvm.sh; rvmsudo gem install rails"
+
+    post :install, "source /etc/profile.d/rvm.sh; rvmsudo gem update --system"
+    post :install, "source /etc/profile.d/rvm.sh; rvmsudo gem pristine --all"
+    
   end
+
+
+  
+  path = 'ruby'
+  # get_version = "ruby #{version}"
+  # verify do 
+  #    @commands << "source /etc/profile.d/rvm.sh; [ -x #{path} -a -n \"`#{path} -v 2>&1 | egrep -e \\\"#{version}\\\"`\" ]"
+  # end
 
   verify do
     has_executable_with_version(
-      "ruby", "ruby #{version}"
+      "/usr/local/rvm/bin/ruby", "ruby #{version}"
     )
   end
 
